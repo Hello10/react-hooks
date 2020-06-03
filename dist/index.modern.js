@@ -39,15 +39,17 @@ function useAnimationFrame(callback) {
 }
 
 class Singleton {
-  static use(initial_state = {}) {
+  static use(initial) {
+    console.log('use!');
+
     if (!this.instance) {
-      this.instance = new this(initial_state);
+      this.instance = new this(initial || {});
     }
 
     const {
       instance
     } = this;
-    const setState = React.useState()[1];
+    const [, setState] = React.useState();
     React.useEffect(() => {
       instance.addListener(setState);
       return () => {
@@ -57,8 +59,16 @@ class Singleton {
     return instance;
   }
 
-  constructor(state = {}) {
-    this.state = this.initialize(state);
+  constructor(initial) {
+    if (this.constructor.instance) {
+      throw new Error("Don't call singleton constructor directly");
+    }
+
+    if (initial.constructor === Function) {
+      initial = initial();
+    }
+
+    this.state = this.initialize(initial);
     this.listeners = [];
   }
 
@@ -86,8 +96,8 @@ class Singleton {
 
 }
 
-function useSingleton(Class, initial_state = {}) {
-  return Class.use(initial_state);
+function useSingleton(Class, initial) {
+  return Class.use(initial);
 }
 useSingleton.Singleton = Singleton;
 
