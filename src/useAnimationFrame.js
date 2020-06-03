@@ -1,4 +1,6 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef} from 'react';
+
+const {requestAnimationFrame, cancelAnimationFrame} = window;
 
 export default function useAnimationFrame (callback) {
   const request = useRef();
@@ -8,7 +10,8 @@ export default function useAnimationFrame (callback) {
   function animate (time) {
     let first = first_time.current;
     if (first === undefined) {
-      first = first_time.current = time;
+      first_time.current = time;
+      first = time;
     }
 
     const last = last_time.current;
@@ -22,8 +25,8 @@ export default function useAnimationFrame (callback) {
     request.current = requestAnimationFrame(animate);
   }
 
-  useEffect(() => {
+  React.useEffect(()=> {
     request.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(request.current);
+    return ()=> cancelAnimationFrame(request.current);
   }, []);
-};
+}

@@ -1,16 +1,13 @@
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var React = require('react');
-var React__default = _interopDefault(React);
+import React, { useRef, useReducer } from 'react';
 
 const {
   requestAnimationFrame,
   cancelAnimationFrame
 } = window;
 function useAnimationFrame(callback) {
-  const request = React.useRef();
-  const last_time = React.useRef();
-  const first_time = React.useRef();
+  const request = useRef();
+  const last_time = useRef();
+  const first_time = useRef();
 
   function animate(time) {
     let first = first_time.current;
@@ -35,7 +32,7 @@ function useAnimationFrame(callback) {
     request.current = requestAnimationFrame(animate);
   }
 
-  React__default.useEffect(() => {
+  React.useEffect(() => {
     request.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(request.current);
   }, []);
@@ -68,8 +65,8 @@ class Singleton {
     const {
       instance
     } = this;
-    const setState = React__default.useState()[1];
-    React__default.useEffect(() => {
+    const setState = React.useState()[1];
+    React.useEffect(() => {
       instance.addListener(setState);
       return () => {
         instance.removeListener(setState);
@@ -111,12 +108,10 @@ function useSingleton(Class, initial_state = {}) {
 useSingleton.Singleton = Singleton;
 
 function useStateBlob(initial) {
-  return React.useReducer((state, delta) => {
+  return useReducer((state, delta) => {
     return _extends({}, state, delta);
   }, initial);
 }
 
-exports.useAnimationFrame = useAnimationFrame;
-exports.useSingleton = useSingleton;
-exports.useStateBlob = useStateBlob;
-//# sourceMappingURL=index.js.map
+export { useAnimationFrame, useSingleton, useStateBlob };
+//# sourceMappingURL=index.esm.js.map
