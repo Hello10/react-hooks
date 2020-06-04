@@ -1,16 +1,19 @@
 import {useSingleton} from '../../dist';
 
 class Theme extends useSingleton.Singleton {
-  initialize () {
+  initialize (state) {
+    console.log('initializing...', state);
     return {
       mode: 'light',
-      primary: '#000000'
+      primary: '#000000',
+      ...state
     };
   }
 
   toggleMode = ()=> {
     const {mode} = this.state;
     const new_mode = mode === 'light' ? 'dark' : 'light';
+    console.log(`changing to ${new_mode} mode`);
     this.setState({mode: new_mode});
   };
 
@@ -33,8 +36,17 @@ class Theme extends useSingleton.Singleton {
   isLight () {
     return (this.state.mode === 'light');
   }
+
+  get name () {
+    return this.options.upper(this.state.mode);
+  }
 }
 
 export default function useTheme () {
-  return useSingleton(Theme);
+  return useSingleton(Theme, {
+    state: {
+      primary: '#663399'
+    },
+    upper: (s)=> s.toUpperCase()
+  });
 }

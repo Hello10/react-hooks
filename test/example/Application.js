@@ -9,12 +9,12 @@ export default function Application () {
 
   const style = {
     light: {
-      backgroundColor: 'white',
-      color: 'black'
+      backgroundColor: '#ffffff',
+      color: theme.primary
     },
     dark: {
-      backgroundColor: 'black',
-      color: 'white'
+      backgroundColor: theme.primary,
+      color: '#ffffff'
     }
   }[theme.mode];
 

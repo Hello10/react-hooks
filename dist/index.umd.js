@@ -62,11 +62,9 @@
   }
 
   class Singleton {
-    static use(initial) {
-      console.log('use!');
-
+    static use(options = {}) {
       if (!this.instance) {
-        this.instance = new this(initial || {});
+        this.instance = new this(options);
       }
 
       const {
@@ -82,16 +80,22 @@
       return instance;
     }
 
-    constructor(initial) {
+    constructor(options = {}) {
       if (this.constructor.instance) {
         throw new Error("Don't call singleton constructor directly");
       }
 
-      if (initial.constructor === Function) {
-        initial = initial();
+      let {
+        state = {}
+      } = options;
+
+      if (state.constructor === Function) {
+        state = state();
       }
 
-      this.state = this.initialize(initial);
+      state = this.initialize(state);
+      this.state = state;
+      this.options = options;
       this.listeners = [];
     }
 
@@ -102,8 +106,8 @@
     setState(state) {
       this.state = _extends({}, this.state, state);
 
-      for (const setState of this.listeners) {
-        setState(this.state);
+      for (const listener of this.listeners) {
+        listener(this.state);
       }
     }
 
@@ -117,8 +121,8 @@
 
   }
 
-  function useSingleton(Class, initial) {
-    return Class.use(initial);
+  function useSingleton(Class, options = {}) {
+    return Class.use(options);
   }
   useSingleton.Singleton = Singleton;
 

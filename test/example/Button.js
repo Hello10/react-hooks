@@ -4,5 +4,15 @@ import useTheme from './useTheme';
 
 export default function Button () {
   const theme = useTheme();
-  return <button onClick={theme.toggleMode}>toggle</button>;
+  return (
+    <button
+      onClick={theme.toggleMode}
+      style={{
+        borderColor: theme.primary,
+        color: theme.primary
+      }}
+    >
+      toggle
+    </button>
+  );
 }
