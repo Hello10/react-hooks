@@ -1,6 +1,6 @@
 {
   "name": "@hello10/react-hooks",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Utility React hooks",
   "main": "dist/index.js",
   "source": "src/index.js",
