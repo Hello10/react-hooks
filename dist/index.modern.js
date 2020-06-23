@@ -62,6 +62,8 @@ class Singleton {
       throw new Error("Don't call singleton constructor directly");
     }
 
+    this.options = options;
+    this.listeners = [];
     let {
       state = {}
     } = options;
@@ -70,10 +72,7 @@ class Singleton {
       state = state();
     }
 
-    state = this.initialize(state);
-    this.state = state;
-    this.options = options;
-    this.listeners = [];
+    this.state = this.initialize(state);
   }
 
   initialize(state) {
