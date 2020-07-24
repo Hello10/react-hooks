@@ -67,9 +67,18 @@ class Singleton {
     } = this;
     const [, setState] = React.useState();
     React.useEffect(() => {
-      instance.addListener(setState);
+      let is_mounted = true;
+
+      function setStateIfMounted(state) {
+        if (is_mounted) {
+          setState(state);
+        }
+      }
+
+      instance.addListener(setStateIfMounted);
       return () => {
-        instance.removeListener(setState);
+        is_mounted = false;
+        instance.removeListener(setStateIfMounted);
       };
     }, []);
     return instance;
